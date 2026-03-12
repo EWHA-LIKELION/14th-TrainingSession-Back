@@ -19,9 +19,10 @@ repository - 저장소
 
 ## 🔑 Key
 <!--기능 구현 핵심 포인트, 실수한 점, 앞으로 유의할 점 등을 짚어 주세요.-->
-clone부터... 
-merge는 브랜치를 합치는 것
-push는 업로드
+clone부터...
+/merge는 브랜치를 합치는 것
+/push는 업로드
+
 pull request는 브랜치에 push한 것을 main에 merge해달라고 요청하는 것.
 각각의 개념을 이해하고 흐름을 아는 것이 중요. 
 
@@ -31,6 +32,8 @@ https://wayhome25.github.io/git/2017/07/08/git-first-pull-request-story/
 
 ## 🔎 Result
 <!--구현 결과를 올려주세요. 페이지, API 응답 등을 캡처해 주세요.-->
+<img width="1002" height="705" alt="image" src="https://github.com/user-attachments/assets/1f443d03-a458-40c2-86e3-c218f27a4a3a" />
+
 
 ## ✍🏻 Review
 <!--회고를 작성해 주세요. 자랑할 점, 아쉬운 점, 궁금한 점 등을 구체적으로 적어주세요.-->
