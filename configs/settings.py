@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e3xrff$-d_qe0f@=7$#b9vcmnvs90@!al+afk3a_$wccvln3jj'
+SECRET_KEY = 'django-insecure-%k1k(weju13dd3m#ofpup@=ght$zm9w(ne5_7c27)&ud(^@6ac'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts2.apps.Accounts2Config',
+    'accounts.apps.AccountsConfig',
+    'blog.apps.BlogConfig',
 ]
 
 MIDDLEWARE = [
@@ -103,10 +104,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-# 사용자 테이블 설정
+
+#사용자 테이블 설정
 AUTH_USER_MODEL = 'auth.User'
 
-# 언어 설정
+#언어 설정
 LANGUAGE_CODE = 'ko-kr'
 
 #시간대 설정
