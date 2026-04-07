@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL='accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.CustomUser"
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'accounts.apps.AccountsConfig',
-    'blog.apps.BlogConfig',
+    "accounts.apps.AccountsConfig",
+    "blog.apps.BlogConfig",
 ]
 
 MIDDLEWARE = [
@@ -118,24 +118,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-  BASE_DIR / 'static',
-  os.path.join(BASE_DIR, 'blog', 'static'), 
+    BASE_DIR / "static",
+    os.path.join(BASE_DIR, "blog", "static"),
 ]
 
-STATIC_ROOT = os.path.join('staticfiles')
+STATIC_ROOT = os.path.join("staticfiles")
 
-#media
-MEDIA_URL='/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# media
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # 언어 설정
-LANGUAGE = 'ko-kr'
+LANGUAGE = "ko-kr"
 
 # 시간대 설정
-TIME_ZONE ='Asia/Seoul'
+TIME_ZONE = "Asia/Seoul"
 
 # 한국어 번역 적용
 USE_I18N = True
