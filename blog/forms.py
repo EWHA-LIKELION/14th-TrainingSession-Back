@@ -9,7 +9,7 @@ class PostForm(forms.ModelForm):
 
     model=Post
 
-    fields=['title', 'content']
+    fields=['title', 'content', 'photo']
 
 class Commentform(forms.ModelForm):
 
