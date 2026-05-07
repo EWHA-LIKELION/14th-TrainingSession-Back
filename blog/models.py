@@ -1,53 +1,45 @@
 from django.db import models
 
 # Create your models here.
+LANGUAGE_CHOICES = (
 
-class Hashtag(models.Model):
+    (1, "KOR"),
 
-    hashtag = models.CharField(max_length=100)
+    (2, "ENG"),
 
+    (3, "JPN"),
 
-    def __str__(self):
+    (4, "CHN"),
 
-        return self.hashtag
+)
+
 
 class Post(models.Model):
 
     title = models.CharField(max_length=200)
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
 
-    content = models.TextField(max_length=500)
-    
-    photo = models.ImageField(blank=True, null=True, upload_to="post_photo")
+    body = models.TextField()
 
-    hashtag = models.ManyToManyField(Hashtag)
-   
+    language = models.IntegerField(choices=LANGUAGE_CHOICES)
+
+
     def __str__(self):
 
         return self.title
-    def summary(self):
-
-        return self.content[:100]
-
-
-
+    
 class Comment(models.Model):
 
- post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
 
- username = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
 
- comment_text = models.TextField()
+    comment_text = models.TextField()
 
- created_at = models.DateTimeField(auto_now_add=True)
-
-
- def approve(self):
-
-    self.save()
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
- def __str__(self):
+    def __str__(self):
 
-    return self.comment_text
+        return self.comment_text[:20]

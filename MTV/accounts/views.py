@@ -1,7 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
-from accounts.forms import RegisterForm
+from MTV.accounts.forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
 
 

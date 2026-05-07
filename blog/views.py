@@ -1,108 +1,97 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
 
 # Create your views here.
+from django.http import HttpRequest, Http404
+
+from rest_framework import status
+
+from rest_framework.response import Response
+
+from rest_framework.views import APIView
+
 from .models import Post
 
-from .forms import PostForm,Commentform
+from .serializers import PostSerializer,  CommentSerializer
 
 
-def home(request):
+class PostListView(APIView):
 
- posts = Post.objects.order_by('-created_at')
+    def get(self, request:HttpRequest, format=None):
 
- return render(request, 'home.html', {'posts': posts})
+        posts = Post.objects.all()
 
-def detail(request, post_id):
+        serializer = PostSerializer(posts, many=True)
 
-   post_detail=get_object_or_404(Post, pk=post_id)
-   post_hashtag=post_detail.hashtag.all()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request:HttpRequest, format=None):
 
-   return render(request, 'detail.html', {'post': post_detail, 'hashtag': post_hashtag})
+        serializer = PostSerializer(data=request.data)
 
-def new(request):
+        if serializer.is_valid():
 
- form=PostForm()
+            serializer.save()
 
- return render(request, 'new.html', {'form': form})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
- 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
-def create(request):
+class PostDetailView(APIView):
 
- form=PostForm(request.POST, request.FILES)
+    def get_object(self, pk):
 
- if form.is_valid():
+        try:
 
-    new_blog=form.save(commit=False)
-    new_blog.date=timezone.now()
-    new_blog.save()
-    hashtags=request.POST['hashtags']
-    hashtag_list=hashtags.split(', ')
+            return Post.objects.get(pk=pk)
 
-    for tag in hashtag_list:
+        except Post.DoesNotExist:
 
-      tag = tag.strip()
-
-      new_hashtag=Hashtag.objects.get_or_create(hashtag=tag)
-
-      new_blog.hashtag.add(new_hashtag[0])
-
-    return redirect('detail', new_blog.id)
-
- return redirect('home')
-
-def delete(request, post_id):
-
- delete_blog = get_object_or_404(Post, pk=post_id)
-
- delete_blog.delete()
-
- return redirect('blog:home')
-def update_page(request, post_id):
-
- update_blog = get_object_or_404(Post, pk=post_id)
-
- return render(request, 'update.html', {'update_blog': update_blog})
+            raise Http404
 
 
-def update_post(request, post_id):
+    def get(self, request:HttpRequest, pk, format=None):
 
- update_blog = get_object_or_404(Post, pk=post_id) 
+        post = self.get_object(pk)
 
- update_blog.title = request.POST['title']
+        serializer = PostSerializer(post)
 
- update_blog.content = request.POST['content']
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+    def put(self, request:HttpRequest, pk, format=None):
 
- update_blog.save()
+        post = self.get_object(pk)
 
- return redirect('blog:home')
+        serializer = PostSerializer(post, data=request.data)
 
-def add_comment(request, post_id):
+        if serializer.is_valid():
 
+            serializer.save()
 
- blog = get_object_or_404(Post, pk=post_id)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
- 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request:HttpRequest, pk, format=None):
 
- if request.method == 'POST':
+        post = self.get_object(pk)
 
-   form = Commentform(request.POST)
+        post.delete()
 
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+class CommentView(APIView):
 
-   if form.is_valid():
+    def post(self, request:HttpRequest, format=None):
 
-      comment = form.save(commit=False)
+        serializer = CommentSerializer(data=request.data)
 
-      comment.post = blog
+        if serializer.is_valid():
 
-      comment.save()
+            serializer.save()
 
-      return redirect('blog:detail', post_id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
- 
-
- else:
-
-   form = Commentform()
-
- return render(request, 'add_comment.html', {'form': form})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
