@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer, CommentSerializer
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class PostListView(APIView):    
+  permission_classes = [IsAuthenticated]
   def get(self, request:HttpRequest, format=None):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
