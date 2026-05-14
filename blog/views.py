@@ -12,28 +12,22 @@ from rest_framework.views import APIView
 from .models import Post
 
 from .serializers import PostSerializer,  CommentSerializer
-
+from rest_framework.permissions import IsAuthenticated
 
 class PostListView(APIView):
-
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request:HttpRequest, format=None):
 
         posts = Post.objects.all()
-
         serializer = PostSerializer(posts, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request:HttpRequest, format=None):
-
         serializer = PostSerializer(data=request.data)
-
         if serializer.is_valid():
-
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
