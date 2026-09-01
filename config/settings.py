@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j-cg&d7d=q1^%nm(o0lt0!5$7)40c03+l40)3sc%$f50lvz(xq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #배포 상황에서는 내부 에러가 외부로 유출되면 안되기 때문에 보안성
+DEBUG = True #배포 상황에서는 내부 에러가 외부로 유출되면 안되기 때문에 보안성
 
-ALLOWED_HOSTS = ['MyeongALyeong.pythonanywhere.com'] #장고가 해당 도메인으로 들어오는 요청을 허용할 수 있음
+ALLOWED_HOSTS = [] #장고가 해당 도메인으로 들어오는 요청을 허용할 수 있음
 
 
 # Application definition
