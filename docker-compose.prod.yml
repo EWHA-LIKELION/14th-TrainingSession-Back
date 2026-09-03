@@ -1,24 +1,12 @@
 version: '3.8'
 
-
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
-    image: ${DOCKER_USER}/my-django-app:latest
+    image: ${DOCKERHUB_USERNAME}/my-django-app:latest
     container_name: django-prod-app
     restart: always
+
     ports:
       - "8000:8000"
-    environment:
-      - DJANGO_SETTINGS_MODULE=프로젝트명.settings
-      - SECRET_KEY=your-production-secret-key
-      - DEBUG=0
- # AWS RDS(PostgreSQL/MySQL 등) 연동 환경변수. 나중에 AWS실습 때 다 바꿀 내용이므로 변수명만 적어두셔도 괜찮습니다!
-      - DB_ENGINE=django.db.backends.postgresql
-      - DB_NAME=mydatabase
-      - DB_USER=myuser
-      - DB_PASSWORD=mypassword
-      - DB_HOST=your-rds-endpoint.amazonaws.com
-      - DB_PORT=5432
+    env_file:
+      - .env.prod
