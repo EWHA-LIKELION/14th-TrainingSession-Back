@@ -27,6 +27,6 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        #file: ./Dockerfile.dev  <-Dockerfile 사용하면 안씀.
+        file: ./Dockerfile.dev  #<-Dockerfile 사용하면 안씀.
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
