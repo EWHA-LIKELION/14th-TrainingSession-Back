@@ -61,4 +61,4 @@ jobs:
           script: |
             cd /home/ubuntu/srv/ubuntu/config/scripts
             chmod +x deploy.sh
-            ./deploy.s
+            ./deploy.sh
