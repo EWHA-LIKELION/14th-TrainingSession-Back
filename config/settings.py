@@ -17,17 +17,27 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False),
+    ALLOWED_HOSTS=(list, []),
+)
+
+if (BASE_DIR / '.env.prod').exists():
+    environ.Env.read_env(BASE_DIR / '.env.prod')
+else:
+    environ.Env.read_env(BASE_DIR / '.env.dev')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j-cg&d7d=q1^%nm(o0lt0!5$7)40c03+l40)3sc%$f50lvz(xq'
-
+SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #배포 상황에서는 내부 에러가 외부로 유출되면 안되기 때문에 보안성
+DEBUG = env('DEBUG') #배포 상황에서는 내부 에러가 외부로 유출되면 안되기 때문에 보안성
 
-ALLOWED_HOSTS = [] #장고가 해당 도메인으로 들어오는 요청을 허용할 수 있음
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS') #장고가 해당 도메인으로 들어오는 요청을 허용할 수 있음
 
 
 # Application definition
@@ -69,6 +79,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware', 
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,10 +136,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db(default="sqlite:///db.sqlite3")
 }
 
 
@@ -168,6 +176,37 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
+
+if AWS_STORAGE_BUCKET_NAME:
+    INSTALLED_APPS += ['storages']
+
+    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='ap-northeast-2')
+    AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN')
+
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3.S3Storage',
+            'OPTIONS': {
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_S3_REGION_NAME,
+                'custom_domain': AWS_S3_CUSTOM_DOMAIN,
+                'file_overwrite': False,
+                'querystring_auth': False,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

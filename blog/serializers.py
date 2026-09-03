@@ -10,5 +10,5 @@ class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ('id', 'title', 'date', 'body', 'language', 'comments')
+        fields = ('id', 'title', 'date', 'body', 'language', 'image', 'comments')
 

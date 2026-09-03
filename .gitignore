@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+#AWS 배포
+.env.*
+media/
+
 # Distribution / packaging
 .Python
 build/
