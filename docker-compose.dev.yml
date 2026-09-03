@@ -3,7 +3,9 @@ version: '3.8'
 services:
   # 1. 기존 장고 웹 서비스 (SQLite 그대로 사용)
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     container_name: django_web
     command: python manage.py runserver 0.0.0.0:8000
     ports:
