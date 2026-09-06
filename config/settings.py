@@ -91,14 +91,6 @@ MIDDLEWARE = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STORAGES = {
-    'default': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
-    },
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True # 쿠키가 cross-site HTTP 요청에 포함됨
@@ -121,8 +113,6 @@ CORS_ALLOW_HEADERS = ( # 요청을 할 때 사용될 수 있는 non-standard HTT
     'x-csrftoken',
     'x-requested-with',
 )
-
-DEBUG = True
 
 # ALLOWED_HOSTS = ['bomee1123.pythonanywhere.com']
 
@@ -190,3 +180,41 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# S3, CloudFront 연결하지 않은 버전
+# STORAGES = {
+#     'default': {
+#         'BACKEND': 'django.core.files.storage.FileSystemStorage',
+#     },
+#     'staticfiles': {
+#         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+#     },
+# }
+
+#S3, CloudFront 연결한 버전
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', 
+default='')
+if AWS_STORAGE_BUCKET_NAME:
+    INSTALLED_APPS += ['storages']
+    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', 
+default='ap-northeast-2')
+    AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN')
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3.S3Storage',
+            'OPTIONS': {
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_S3_REGION_NAME,
+                'custom_domain': AWS_S3_CUSTOM_DOMAIN,
+                'file_overwrite': False,
+                'querystring_auth': False,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 
+'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
