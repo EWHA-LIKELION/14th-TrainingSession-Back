@@ -192,12 +192,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # }
 
 #S3, CloudFront 연결한 버전
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', 
-default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
 if AWS_STORAGE_BUCKET_NAME:
     INSTALLED_APPS += ['storages']
-    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', 
-default='ap-northeast-2')
+    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='ap-northeast-2')
     AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN')
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
@@ -214,7 +212,6 @@ default='ap-northeast-2')
             },
         },
         'staticfiles': {
-            'BACKEND': 
-'whitenoise.storage.CompressedManifestStaticFilesStorage',
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
         },
     }
