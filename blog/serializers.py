@@ -21,6 +21,6 @@ class PostSerializer(serializers.ModelSerializer):
 
         fields = (
 
-            'id', 'title', 'date', 'body', 'language', 'comments'
+            'id', 'title', 'date', 'body', 'language', 'comments', 'image'
 
  )

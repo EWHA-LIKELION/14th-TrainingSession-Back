@@ -17,13 +17,10 @@ LANGUAGE_CHOICES = (
 class Post(models.Model):
 
     title = models.CharField(max_length=200)
-
     date = models.DateTimeField(auto_now_add=True)
-
     body = models.TextField()
-
     language = models.IntegerField(choices=LANGUAGE_CHOICES)
-
+    image = models.ImageField(upload_to='posts/', blank=True, null=True)
 
     def __str__(self):
 
