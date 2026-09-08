@@ -6,10 +6,11 @@ from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer,CommentSerializer
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.parsers import FormParser, MultiPartParser
 
 class PostListView(APIView):
     permission_classes = [IsAuthenticated] #인증된 사람만 post조회 작성 가능
+    parser_classes = [FormParser, MultiPartParser] # 이미지 업로드를 위해 FormParser, MultiPartParser 추가
     def get(self, request:HttpRequest, format=None):
         posts = Post.objects.all()
         serializer=PostSerializer(posts, many=True)
@@ -25,6 +26,7 @@ class PostListView(APIView):
 
     
 class PostDetailView(APIView):
+    parser_classes = [FormParser, MultiPartParser] # 이미지 업로드를 위해 FormParser, MultiPartParser 추가
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
