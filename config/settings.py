@@ -79,7 +79,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -120,12 +119,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -173,7 +166,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True # 모든 호스트에서 cross-site 요청 허용
 
 CORS_ALLOW_CREDENTIALS = True # 쿠키가 cross-site HTTP 요청에 포함됨
-CORS_ALLOW_METHOODS = ( # 실제 요청에 허용되는 HTTP 메서드
+CORS_ALLOW_METHODS = ( # 실제 요청에 허용되는 HTTP 메서드
 'GET',
 'POST',
 'PUT',
