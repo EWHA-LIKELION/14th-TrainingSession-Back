@@ -38,6 +38,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG') #배포 상황에서는 내부 에러가 외부로 유출되면 안되기 때문에 보안성
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS') #장고가 해당 도메인으로 들어오는 요청을 허용할 수 있음
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 
 
 # Application definition
@@ -180,14 +181,41 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STORAGES = {
-    'default': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
-    },
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+AWS_STORAGE_BUCKET_NAME = env(
+    'AWS_STORAGE_BUCKET_NAME',
+    default=''
+)
+
+if AWS_STORAGE_BUCKET_NAME:
+    INSTALLED_APPS += ['storages']
+
+    AWS_S3_REGION_NAME = env(
+        'AWS_S3_REGION_NAME',
+        default='ap-northeast-2'
+    )
+
+    AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN')
+
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3.S3Storage',
+            'OPTIONS': {
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_S3_REGION_NAME,
+                'custom_domain': AWS_S3_CUSTOM_DOMAIN,
+                'file_overwrite': False,
+                'querystring_auth': False,
+            },
+        },
+
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
