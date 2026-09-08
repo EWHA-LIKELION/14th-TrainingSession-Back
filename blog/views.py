@@ -6,10 +6,13 @@ from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import FormParser, MultiPartParser
+
 # Create your views here.
 
 class PostListView(APIView):    
   permission_classes = [IsAuthenticated]
+  parser_classes = [MultiPartParser, FormParser]
   def get(self, request:HttpRequest, format=None):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
@@ -22,6 +25,8 @@ class PostListView(APIView):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 class PostDetailView(APIView):
+  parser_classes = [MultiPartParser, FormParser]
+
   def get_object(self, pk):
     try:
       return Post.objects.get(pk=pk)
