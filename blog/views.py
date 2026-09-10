@@ -8,14 +8,26 @@ from .serializers import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 
+from django.core.cache import cache
+from utils.constants import Cachekey
+
 # Create your views here.
 
 class PostListView(APIView):    
   permission_classes = [IsAuthenticated]
   parser_classes = [MultiPartParser, FormParser]
   def get(self, request:HttpRequest, format=None):
+    cache_key = Cachekey.POSTING_LIST
+    cached = cache.get(cache_key)
+
+    if cached is not None:
+      return Response(
+        status=status.HTTP_200_OK,
+        data=cached
+      )
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
+    cache.set(cache_key, serializer.data,60*3)
     return Response(serializer.data, status=status.HTTP_200_OK)
   def post(self, request:HttpRequest, format=None):
     serializer = PostSerializer(data=request.data)
