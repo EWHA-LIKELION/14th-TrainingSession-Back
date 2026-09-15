@@ -21,10 +21,10 @@ env = environ.Env(
 )
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if (BASE_DIR / '.env.prod').exists():
-    environ.Env.read_env(BASE_DIR / '.env.prod')
-else:
-    environ.Env.read_env(BASE_DIR / '.env.dev')
+#if (BASE_DIR / '.env.prod').exists():
+#    environ.Env.read_env(BASE_DIR / '.env.prod')
+#else:
+environ.Env.read_env(BASE_DIR / '.env.dev')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -216,3 +216,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CACHES = {
+    'default' : env.cache()
+}
