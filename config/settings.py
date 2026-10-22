@@ -22,10 +22,10 @@ env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, []),
 )
-if (BASE_DIR / '.env.prod').exists():
-    environ.Env.read_env(BASE_DIR / '.env.prod')
-else:
-    environ.Env.read_env(BASE_DIR / '.env.dev')
+# if (BASE_DIR / '.env.prod').exists():
+#    environ.Env.read_env(BASE_DIR / '.env.prod')
+# else:
+environ.Env.read_env(BASE_DIR / '.env.dev')
 
 
 # Quick-start development settings - unsuitable for production
@@ -216,3 +216,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CACHES = {
+    'default': env.cache()
+}
