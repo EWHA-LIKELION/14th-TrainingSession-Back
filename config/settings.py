@@ -24,10 +24,11 @@ env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, []),
 )
-if (BASE_DIR / '.env.prod').exists():
-    environ.Env.read_env(BASE_DIR / '.env.prod')
-else:
-    environ.Env.read_env(BASE_DIR / '.env.dev')
+environ.Env.read_env(BASE_DIR / '.env.dev')
+# if (BASE_DIR / '.env.prod').exists():
+#     environ.Env.read_env(BASE_DIR / '.env.prod')
+# else:
+#     environ.Env.read_env(BASE_DIR / '.env.dev')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -143,6 +144,9 @@ DATABASES = {
     'default': env.db(default="sqlite:///db.sqlite3")
 }
 
+CACHES = {
+    'default': env.cache(),
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
