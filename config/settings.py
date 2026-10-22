@@ -24,10 +24,10 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, []),
 )
 
-if (BASE_DIR / '.env.prod').exists():
-    environ.Env.read_env(BASE_DIR / '.env.prod')
-else:
-    environ.Env.read_env(BASE_DIR / '.env.dev')
+# if (BASE_DIR / '.env.prod').exists():
+#     environ.Env.read_env(BASE_DIR / '.env.prod')
+# else:
+environ.Env.read_env(BASE_DIR / '.env.dev')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -138,6 +138,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': env.db(default="sqlite:///db.sqlite3")
+}
+
+CACHES = {
+    'default': env.cache()
 }
 
 
